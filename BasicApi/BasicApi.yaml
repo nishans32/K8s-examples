@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hiw-deployment
+  labels:
+    app: hiw
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hiw
+  template:
+    metadata:
+      labels:
+        app: hiw
+    spec:
+      containers:
+      - name: hiw-k8
+        image: nishans32/hiw:1.2
+        ports:
+        - containerPort: 80
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Development
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: hiw-service
+spec:
+  selector:
+    app: hiw
+  type: NodePort    
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 80
+      nodePort: 30010
